@@ -2,20 +2,58 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect
 
-from .forms import ResumeItemForm
-from .models import ResumeItem
-
+from .forms import ResumeItemForm, ResumeForm
+from .models import ResumeItem, Resume
 
 @login_required
-def resume_view(request):
+def resume_index_view(request):
     """
-    Handle a request to view a user's resume.
+    Handle a request to view a user's resume index.
     """
+    resumes = Resume.objects\
+        .filter(user=request.user)\
+        .order_by('-title')
+
+    return render(request, 'resume/resume_index.html', {
+        'resumes': resumes
+    })
+
+@login_required
+def resume_create_view(request):
+    """
+    Handle a request to create a new resume.
+    """
+    if request.method == 'POST':
+        form = ResumeForm(request.POST)
+        if form.is_valid():
+            new_resume = form.save(commit=False)
+            new_resume.user = request.user
+            new_resume.save()
+
+            return redirect(resume_detail_view, new_resume.id)
+    else:
+        form = ResumeItemForm()
+
+    return render(request, 'resume/resume_create.html', {'form': form})
+
+@login_required
+def resume_detail_view(request, resume_id):
+    """
+    Handle a request to see the detail of a resume.
+    :param resume_id: The database ID of the Resume to edit.
+    """
+    try:
+        resume = Resume.objects\
+            .filter(user=request.user)\
+            .get(id=resume_id)
+    except ResumeItem.DoesNotExist:
+        raise Http404
+
     resume_items = ResumeItem.objects\
         .filter(user=request.user)\
         .order_by('-start_date')
 
-    return render(request, 'resume/resume.html', {
+    return render(request, 'resume/resume_detail.html', {
         'resume_items': resume_items
     })
 

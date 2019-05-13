@@ -1,7 +1,15 @@
 from django import forms
 
-from models import ResumeItem
+from models import ResumeItem, Resume
 
+class ResumeForm(forms.ModelForm):
+    """
+    A form for creating and editing resume. Note that 'user' is not
+    included: it is always set to the requesting user.
+    """
+    class Meta:
+        model = Resume
+        fields = ['title']
 
 class ResumeItemForm(forms.ModelForm):
     """
@@ -10,4 +18,4 @@ class ResumeItemForm(forms.ModelForm):
     """
     class Meta:
         model = ResumeItem
-        fields = ['title', 'company', 'start_date', 'end_date', 'description']
+        fields = ['jobTitle', 'company', 'start_date', 'end_date', 'description']

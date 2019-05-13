@@ -37,14 +37,14 @@ Base form template for creating and editing resume items.
       <div class="row">
 
         <div class="col-sm-6">
-          {{ form.title.errors }}
+          {{ form.jobTitle.errors }}
           <div class="form-group">
-            <label for="inputTitle" class="col-sm-2 control-label">Title</label>
+            <label for="inputJobTitle" class="col-sm-2 control-label">Job Title</label>
             <div class="col-sm-8">
-              <input type="text" name="title" id="inputTitle"
+              <input type="text" name="jobTitle" id="inputJobTitle"
                      required maxlength="127"
-                     class="form-control" aria-label="Title"
-                     {% if form.title.value %}value="{{ form.title.value }}"{% endif %}>
+                     class="form-control" aria-label="Job Title"
+                     {% if form.jobTitle.value %}value="{{ form.jobTitle.value }}"{% endif %}>
             </div>
           </div>
           {{ form.company.errors }}

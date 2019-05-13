@@ -1,0 +1,72 @@
+{% extends "base_logged_in.html" %}
+
+{% comment %}
+Template for viewing the resume index.
+{% endcomment %}
+
+{% block styles %}
+  {{ block.super }}
+
+  <style>
+    div.resume-container {
+      margin: 24px auto 0;
+      max-width: 800px;
+    }
+
+    div.header-center-container {
+      text-align: center;
+
+      margin-top: 12px;
+    }
+
+    div.header-container {
+      text-align: left;
+
+      display: inline-block;
+    }
+
+    div.header-container > h3 {
+      margin-top: 0;
+
+      color: #666666;
+    }
+
+    section.resume-item {
+      margin-top: 36px;
+
+      position: relative;
+    }
+
+    section.resume-item > a.btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    div.resume-container > a.btn {
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container content-section resume-container">
+    <div class="header-center-container">
+      <div class="header-container">
+        <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+        <h3>{{ request.user.email }}</h3>
+      </div>
+    </div>
+
+    <h2>Resumes</h2>
+    {% for resume in resumes %}
+      <section class="resume">
+        <h3>{{ resume.title }}</h3>
+        <a class="btn btn-primary" href="/resume/{{ resume_item.id }}/">Details</a>
+      </section>
+    {% endfor %}
+
+    <a class="btn btn-success" href="/resume/create/">Add New Resume</a>
+  </div>
+{% endblock %}
