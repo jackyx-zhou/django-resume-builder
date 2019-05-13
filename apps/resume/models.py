@@ -28,6 +28,6 @@ class ResumeItem(models.Model):
 
     def __unicode__(self):
         return "{}: {} at {} ({})".format(self.user.username,
-                                          self.title,
+                                          self.jobTitle,
                                           self.company,
                                           self.start_date.isoformat())

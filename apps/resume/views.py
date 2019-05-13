@@ -37,9 +37,9 @@ def resume_create_view(request):
     return render(request, 'resume/resume_create.html', {'form': form})
 
 @login_required
-def resume_detail_view(request, resume_id):
+def resume_details_view(request, resume_id):
     """
-    Handle a request to see the detail of a resume.
+    Handle a request to see the details of a resume.
     :param resume_id: The database ID of the Resume to edit.
     """
     try:
@@ -53,7 +53,8 @@ def resume_detail_view(request, resume_id):
         .filter(user=request.user)\
         .order_by('-start_date')
 
-    return render(request, 'resume/resume_detail.html', {
+    return render(request, 'resume/resume_details.html', {
+        'resume': resume,
         'resume_items': resume_items
     })
 
