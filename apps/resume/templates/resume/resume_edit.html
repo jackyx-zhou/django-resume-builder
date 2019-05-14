@@ -1,10 +1,10 @@
 {% extends "resume/resume_simple_form.html" %}
 
 {% comment %}
-Template for creating a resume.
+Template for editing a resume.
 {% endcomment %}
 
-{% block simple_form_header_text %}Create Resume{% endblock %}
+{% block simple_form_header_text %}Edit Resume{% endblock %}
 
 {% block simple_form_field %}
 {{ form.title.errors }}
@@ -14,6 +14,7 @@ Template for creating a resume.
     <input type="text" name="title" id="inputTitle"
            required maxlength="127"
            class="form-control" aria-label="Resume Title"
+           placeholder={{resume.title}}
            {% if form.title.value %}value="{{ form.title.value }}"{% endif %}>
   </div>
 </div>
@@ -22,4 +23,9 @@ Template for creating a resume.
 {% block simple_form_back_button %}
 <a class="btn btn-default" href="/resume/">Back</a>
 {% endblock %}
-{% block simple_form_submit_button_text %}Create{% endblock %}
+{% block simple_form_submit_button_text %}Rename{% endblock %}
+{% block simple_form_additional_buttons %}
+    <button type="submit" name="delete" class="btn btn-danger delete-button">
+      Delete
+    </button>
+{% endblock %}

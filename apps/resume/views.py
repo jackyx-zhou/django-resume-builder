@@ -37,6 +37,32 @@ def resume_create_view(request):
     return render(request, 'resume/resume_create.html', {'form': form})
 
 @login_required
+def resume_edit_view(request, resume_id):
+    """
+    Handle a request to rename a new resume.
+    """
+    try:
+        resume = Resume.objects\
+            .filter(user=request.user)\
+            .get(id=resume_id)
+    except Resume.DoesNotExist:
+        raise Http404
+
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            resume.delete()
+            return redirect(resume_index_view)
+
+        form = ResumeForm(request.POST, instance=resume)
+        if form.is_valid():
+            form.save()
+            form=ResumeForm(instance=resume)
+    else:
+        form = ResumeForm(instance=resume)
+
+    return render(request, 'resume/resume_edit.html', {'form': form, 'resume': resume})
+
+@login_required
 def resume_details_view(request, resume_id):
     """
     Handle a request to see the details of a resume.
@@ -69,8 +95,12 @@ def resume_item_select_view(request, resume_id):
        form = SelectResumeItemForm(request.POST)
        if form.is_valid():
            selected_resume_item = form.cleaned_data.get('item')
-           selected_resume_item.resumes.add(resume)
-           selected_resume_item.save()
+           if 'delete' in request.POST:
+               selected_resume_item.resumes.remove(resume)
+               selected_resume_item.save()
+           else:
+               selected_resume_item.resumes.add(resume)
+               selected_resume_item.save()
 
            return redirect(resume_details_view, resume_id)
        else:
@@ -119,7 +149,7 @@ def resume_item_edit_view(request, resume_item_id):
     if request.method == 'POST':
         if 'delete' in request.POST:
             resume_item.delete()
-            return redirect(resume_view)
+            return redirect(resume_index_view)
 
         form = ResumeItemForm(request.POST, instance=resume_item)
         if form.is_valid():

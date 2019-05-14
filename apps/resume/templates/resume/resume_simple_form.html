@@ -1,0 +1,64 @@
+{% extends "base_logged_in.html" %}
+
+{% comment %}
+Base form template for creating a simple form with only 1 field.
+{% endcomment %}
+
+{% block styles %}
+  {{ block.super }}
+
+  <style>
+    div.simple-form-container {
+      margin-top: 24px;
+    }
+
+    h1.simple-form-header {
+      margin-bottom: 24px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+
+    <div class="row content-section simple-form-container">
+
+      <div class="col-xs-12">
+
+    <h1 class="simple-form-header">{% block simple_form_header_text %}{% endblock %}</h1>
+
+    <form class="form-horizontal" action="" method="post">
+      {% csrf_token %}
+
+      <div class="row">
+
+        <div class="col-sm-6">
+          {% block simple_form_field %}{% endblock %}
+        </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          {% if message %}
+            <p class="text-success">{{ message }}</p>
+          {% endif %}
+
+          <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-11 submit-col">
+              <button type="submit" class="btn btn-primary">
+                {% block simple_form_submit_button_text %}{% endblock %}
+              </button>
+              {% block simple_form_back_button %}{% endblock %}
+
+              {% block simple_form_additional_buttons %}{% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+      </div>
+
+    </div>
+
+  </div>
+{% endblock %}

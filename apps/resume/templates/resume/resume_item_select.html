@@ -1,64 +1,29 @@
-{% extends "base_logged_in.html" %}
+{% extends "resume/resume_simple_form.html" %}
 
 {% comment %}
-Base form template for creating and editing resume items.
+Template for selecting a resume item for a resume.
 {% endcomment %}
+{% block simple_form_header_text %}Select a Resume Item{% endblock %}
 
-{% block styles %}
-  {{ block.super }}
-
-  <style>
-    div.resume-item-form-container {
-      margin-top: 24px;
-    }
-
-    h1.resume-item-header {
-      margin-bottom: 24px;
-    }
-
-    textarea#inputDescription {
-      height: 120px;
-    }
-  </style>
+{% block simple_form_field %}
+{{ form.title.errors }}
+<div class="form-group">
+  <div class="col-sm-offset-1 col-sm-11 submit-col">
+    {{ form.item }}
+  </div>
+</div>
 {% endblock %}
 
-{% block content %}
-  <div class="container-fluid">
+{% block simple_form_submit_button_text %}Add to Resume{% endblock %}
 
-    <div class="row content-section resume-item-form-container">
+{% block simple_form_back_button %}
+<a class="btn btn-default" href="{% url 'resume-details' resume.pk %}">Back</a>
+{% endblock %}
 
-      <div class="col-xs-12">
-
-    <h1 class="resume-item-header">Select Resume Item</h1>
-
-    <form class="form-horizontal" action="" method="post">
-      {% csrf_token %}
-
-      <div class="row">
-
-        <div class="col-sm-6">
-          {{ form.item}}
-      <div class="row">
-        <div class="col-sm-12">
-          {% if message %}
-            <p class="text-success">{{ message }}</p>
-          {% endif %}
-
-          <div class="form-group">
-            <div class="col-sm-offset-1 col-sm-11 submit-col">
-              <button type="submit" class="btn btn-primary">
-                Add Item to Resume
-              </button>
-              <a class="btn btn-default" href="{% url 'resume-details' resume.pk %}">Back</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-
-      </div>
-
-    </div>
-    <a class="btn btn-success" href="/resume/item/create/">Create Resume Item</a>
-  </div>
+{% block simple_form_additional_buttons %}
+    <button type="submit" name="delete" class="btn btn-danger delete-button">
+      Remove from Resume
+    </button>
+    <br /><br />
+    <a class="btn btn-success" href="/resume/item/create/">Create New Resume Item</a>
 {% endblock %}
