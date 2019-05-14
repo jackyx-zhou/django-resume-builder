@@ -54,8 +54,8 @@ Template for viewing a resume.
   <div class="container content-section resume-container">
     <div class="header-center-container">
       <div class="header-container">
-        <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
-        <h3>{{ request.user.email }}</h3>
+        <h1>{{ resume.title }}</h1>
+        <h3>{{ request.user.first_name }} {{ request.user.last_name }}</h3>
       </div>
     </div>
 

@@ -23,8 +23,8 @@ class ResumeItem(models.Model):
 
     description = models.TextField(max_length=2047, blank=True)
 
-    # TODO make a reusable model with ManyToManyField
-    resume = models.ForeignKey('Resume', on_delete=models.CASCADE)
+    # Using ManyToManyField so a ResumeItem can be used in many resumes
+    resume = models.ManyToManyField('Resume', related_name='items')
 
     def __unicode__(self):
         return "{}: {} at {} ({})".format(self.user.username,
