@@ -36,11 +36,6 @@ Template for viewing the resume index.
       align-items: center;
     }
 
-    section.resume-item > a.btn {
-      position: absolute;
-      right: 0;
-    }
-
     div.resume-container > a.btn {
       margin-top: 24px;
       margin-bottom: 24px;
@@ -60,15 +55,19 @@ Template for viewing the resume index.
     <h2>Resumes</h2>
     {% for resume in resumes %}
       <div class="resume row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <h3>{{ resume.title }}</h3>
         </div>
-        <div class="col-sm-6 text-right">
+        <div class="col-sm-4">
+          <h4>{{ resume.items.count }} Item{{ resume.items.count|pluralize }}</h4>
+        </div>
+        <div class="col-sm-4 text-right">
           <a class="btn btn-primary" href="/resume/{{ resume.id }}/">Details</a>
         </div>
       </div>
     {% endfor %}
 
     <a class="btn btn-success" href="/resume/create/">Add New Resume</a>
+    <a class="btn btn-success" href="/resume/item/create/">Add New Resume Item</a>
   </div>
 {% endblock %}

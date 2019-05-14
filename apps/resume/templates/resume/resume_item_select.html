@@ -1,0 +1,64 @@
+{% extends "base_logged_in.html" %}
+
+{% comment %}
+Base form template for creating and editing resume items.
+{% endcomment %}
+
+{% block styles %}
+  {{ block.super }}
+
+  <style>
+    div.resume-item-form-container {
+      margin-top: 24px;
+    }
+
+    h1.resume-item-header {
+      margin-bottom: 24px;
+    }
+
+    textarea#inputDescription {
+      height: 120px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+
+    <div class="row content-section resume-item-form-container">
+
+      <div class="col-xs-12">
+
+    <h1 class="resume-item-header">Select Resume Item</h1>
+
+    <form class="form-horizontal" action="" method="post">
+      {% csrf_token %}
+
+      <div class="row">
+
+        <div class="col-sm-6">
+          {{ form.item}}
+      <div class="row">
+        <div class="col-sm-12">
+          {% if message %}
+            <p class="text-success">{{ message }}</p>
+          {% endif %}
+
+          <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-11 submit-col">
+              <button type="submit" class="btn btn-primary">
+                Add Item to Resume
+              </button>
+              <a class="btn btn-default" href="{% url 'resume-details' resume.pk %}">Back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+      </div>
+
+    </div>
+    <a class="btn btn-success" href="/resume/item/create/">Create Resume Item</a>
+  </div>
+{% endblock %}

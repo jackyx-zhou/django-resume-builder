@@ -34,6 +34,8 @@ urlpatterns = [
         name='resume-create'),
     url(r'^resume/(\d+)/$', resume_views.resume_details_view,
         name='resume-details'),
+    url(r'^resume/(\d+)/select/$', resume_views.resume_item_select_view,
+        name='resume-item-select'),
     url(r'^resume/item/edit/(\d+)/$', resume_views.resume_item_edit_view,
         name='resume-item-edit'),
     url(r'^resume/item/create/$', resume_views.resume_item_create_view,

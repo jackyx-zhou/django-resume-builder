@@ -19,3 +19,6 @@ class ResumeItemForm(forms.ModelForm):
     class Meta:
         model = ResumeItem
         fields = ['jobTitle', 'company', 'start_date', 'end_date', 'description']
+
+class SelectResumeItemForm(forms.Form):
+    item = forms.ModelChoiceField(queryset=ResumeItem.objects.all().order_by('-start_date'), empty_label="Select Resume Item", widget=forms.Select(attrs={'class':'form-control'}))

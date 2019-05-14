@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect
 
-from .forms import ResumeItemForm, ResumeForm
+from .forms import ResumeItemForm, ResumeForm, SelectResumeItemForm
 from .models import ResumeItem, Resume
 
 @login_required
@@ -42,26 +42,47 @@ def resume_details_view(request, resume_id):
     Handle a request to see the details of a resume.
     :param resume_id: The database ID of the Resume to edit.
     """
-    try:
-        resume = Resume.objects\
-            .filter(user=request.user)\
-            .get(id=resume_id)
-    except ResumeItem.DoesNotExist:
-        raise Http404
-
-    resume_items = ResumeItem.objects\
+    resume = Resume.objects\
         .filter(user=request.user)\
-        .filter(resume=resume)\
-        .order_by('-start_date')
+        .get(id=resume_id)
+    resume_items = resume.items.order_by('-start_date')
 
     return render(request, 'resume/resume_details.html', {
         'resume': resume,
         'resume_items': resume_items
     })
 
+@login_required
+def resume_item_select_view(request, resume_id):
+    """
+    Handle a request to select a resume item for a resume.
+    """
+    try:
+        resume = Resume.objects\
+            .filter(user=request.user)\
+            .get(id=resume_id)
+    except Resume.DoesNotExist:
+        raise Http404
+
+    form = SelectResumeItemForm()
+    if request.method == 'POST':
+       form = SelectResumeItemForm(request.POST)
+       if form.is_valid():
+           selected_resume_item = form.cleaned_data.get('item')
+           selected_resume_item.resumes.add(resume)
+           selected_resume_item.save()
+
+           return redirect(resume_details_view, resume_id)
+       else:
+           form = SelectResumeItemForm()
+
+    return render(request, 'resume/resume_item_select.html', {
+        'form': form,
+        'resume': resume
+    })
 
 @login_required
-def resume_item_create_view(request, resume_id):
+def resume_item_create_view(request):
     """
     Handle a request to create a new resume item.
     """
@@ -70,9 +91,6 @@ def resume_item_create_view(request, resume_id):
         if form.is_valid():
             new_resume_item = form.save(commit=False)
             new_resume_item.user = request.user
-            new_resume_item.resume = Resume.objects\
-                .filter(user=request.user)\
-                .get(id=resume_id)
             new_resume_item.save()
 
             return redirect(resume_item_edit_view, new_resume_item.id)
